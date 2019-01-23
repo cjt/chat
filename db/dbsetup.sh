@@ -63,5 +63,9 @@ fi
 # Get messages for room - TODO should bound, e.g. last 100 messages
 #curl -X GET "http://127.0.0.1:5984/chat1/_design/messages/_view/messages?key=%22Mountain%20Rescue%22&include_docs=true"
 
+#
+# Enable CORS for all domains!
+#
+
 exit 0;
 
