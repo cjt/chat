@@ -1,0 +1,41 @@
+<div class="room-list" id="room-list">
+  <div class="room-list-header" id="room-list-header">Rooms</div>
+    <ul class="list">
+
+      <li ng-repeat="room in $ctrl.rooms"  class="clearfix">
+        <div class="about">
+          <span class="name">{{room.name}}</span>
+          <span class="num-users">({{room.messages}} messages)</span>
+        </div>
+      </li>
+
+      <!--
+      <li class="clearfix">
+        <div class="about">
+          <span class="name">Mountain Rescue</span>
+          <span class="num-users">(4 users)</span>
+        </div>
+      </li>
+          
+      <li class="clearfix">
+        <div class="about">
+          <span class="name">Helicopters</span>
+          <span class="num-users">(5 users)</span>
+        </div>
+      </li>
+          
+      <li class="clearfix">
+        <div class="about">
+          <span class="name">Surf Lifesaving</span>
+          <span class="num-users">(3 users)</span>
+        </div>
+      </li>
+      -->
+
+    </ul>
+
+    <div class="room-create" id="room-create">
+      <input type="text" placeholder="room" />
+      <button>Create</button>
+    </div>
+</div>
