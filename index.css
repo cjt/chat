@@ -1,0 +1,203 @@
+$orange: #FC4827;
+$silver: #D5D5D5;
+$shark: #2D3139;
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+body {
+  background: #2D3139; 
+  font: 14px/20px arial, helvetica, clean, sans-serif;
+  padding: 20px 0;
+  color: white;
+}
+
+.container {
+  margin: 0 auto;
+  width: 1200px;
+  background: #FC4827; 
+  border-radius: 5px;
+}
+
+.username {
+  font-size: 20px;
+  padding: 10px;
+}
+
+.username input {
+  width: 20%;
+  border: none;
+  padding: 10px 10px 10px 10px;
+  border-radius: 5px;
+  resize: none;
+}
+
+.room-list {
+  width: 200px;
+  float: left;
+}
+
+.room-list .room-list-header {
+  font-size: 16px;
+  padding: 10px;
+}
+
+.room-list ul {
+  font-size: 14px;
+  padding: 15px;
+  list-style-type: none;
+}
+
+.room-list ul li {
+  padding-bottom: 2px;
+}
+
+.room-list .room-create input {
+  width: 80%;
+  border: none;
+  padding: 10px 10px 10px 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  resize: none;
+}
+
+.room-list .room-create button {
+  float: right;
+  color: $blue;
+  padding: 5px 5px 5px 5px;
+  font-size: 16px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  background: #F2F5F8;
+}
+
+.room {
+  width: 800px;
+  float:left;
+  background: #D5D5D5;
+  border-radius: 5px;
+  color: #434651;
+}
+
+.room .room-header {
+  padding: 20px;
+  border-bottom: 2px solid white;
+}
+
+.room .room-header .room-about {
+  float: left;
+  padding-left: 10px;
+  margin-top: 6px;
+}
+
+.room .room-header .room-about .room-name {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.room .room-history {
+  border-bottom: 2px solid white;
+  overflow-y: scroll;
+  height: 300px;
+}
+
+.room .room-history ul {
+  list-style-type: none;
+}
+
+.room .room-history .message-data-time {
+  color: lighten($gray, 8%);
+  padding-left: 2px;
+}
+
+.room .room-history .my-name {
+  font-weight: bold;
+}
+
+.room .room-history .message {      
+  color: white;
+  font-size: 14px;
+  width: 90%;
+  position: relative;
+}
+
+.room .room-history .my-message {
+  font-weight: bold;
+}
+
+.room .room-history .other-message {
+}
+
+.room .chat-message {
+  padding: 10px;
+}
+
+.room .chat-message textarea {
+  width: 85%;
+  border: none;
+  padding: 10px 20px;
+  font: 14px/22px "Lato", Arial, sans-serif;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  resize: none;
+}
+
+.room .chat-message button {
+  float: right;
+  color: $blue;
+  font-size: 16px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  background: #F2F5F8;
+}
+
+.room .chat-message:hover {
+  color: darken($blue, 7%);
+}
+
+.user-list {
+  width:200px;
+  float: right;
+}
+
+.user-list .user-header {
+  font-size: 16px;
+  padding: 10px;
+}
+
+.user-list ul {
+  padding: 20px;
+  height: 300px;
+  list-style-type: none;
+}
+
+.user-list li {
+  list-style-type: none;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.float-right {
+  float: right;
+}
+
+.clearfix:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+
