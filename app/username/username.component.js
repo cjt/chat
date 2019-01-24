@@ -4,5 +4,10 @@ angular
   .module('username')
   .component('username', {
     templateUrl: 'username/username.template.html',
-    controller: [function roomListController() {}]
+    controller: ['$scope', function usernameController($scope) {
+      $scope.setUsername = function (username) {
+	$scope.$parent.username = username;
+	console.log("Selected username: " + username);
+      };
+    }]
   });

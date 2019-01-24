@@ -5,6 +5,8 @@
     <script src="lib/angular/angular.js"></script>
     <script src="lib/angular-route/angular-route.js"></script>
     <script src="app.module.js"></script>
+    <script src="chat/chat.module.js"></script>
+    <script src="chat/chat.component.js"></script>
     <script src="username/username.module.js"></script>
     <script src="username/username.component.js"></script>
     <script src="room-list/room-list.module.js"></script>
@@ -16,15 +18,8 @@
   </head>
   <body>
     <div class="container clearfix">
-      <!-- <div ng-view></div> -->
 
-      <username></username>
-
-      <room-list></room-list>
-      
-      <room></room>
-
-      <user-list></user-list>
+      <chat></chat>
       
     </div>
 
