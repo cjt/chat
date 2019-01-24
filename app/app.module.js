@@ -3,5 +3,6 @@
 angular.module('chatApp', [
   'ngRoute',
   'roomList',
-  'room'
+  'room',
+  'userList'
 ]);
