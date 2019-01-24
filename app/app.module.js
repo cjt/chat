@@ -1,5 +1,7 @@
 'use strict';
 
 angular.module('chatApp', [
-  'roomList'
+  'ngRoute',
+  'roomList',
+  'room'
 ]);
