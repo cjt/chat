@@ -8,7 +8,7 @@ angular.
       var self = this;
 
       $scope.$parent.loadMessages = function () {
-	$http.get('http://127.0.0.1:5984/chat1/_design/messages/_view/messages?key=\"' + $scope.$parent.room.name + '\"&include_docs=true').then(function(response) {
+	$http.get('http://127.0.0.1:5984/chat/_design/messages/_view/messages?key=\"' + $scope.$parent.room.name + '\"&include_docs=true').then(function(response) {
           var rows = response.data.rows;
           var messages = [];
 	  
