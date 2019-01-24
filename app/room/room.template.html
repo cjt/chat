@@ -1,9 +1,9 @@
 <div class="room">
   <div class="room-header clearfix">
     <div class="room-about">
-      <div class="room-name">Mountain Rescue</div>
-      <div class="room-num-messages">324 messages</div>
-    </div>    
+      <div class="room-name">{{$ctrl.room}}</div>
+      <div class="room-num-messages">{{$ctrl.messages.length}} messages</div>
+    </div>
   </div>
 
   <div class="room-history">
@@ -16,7 +16,6 @@
 	</div>
       </li>
     </ul>
-    
   </div>
 
   <div class="chat-message clearfix">

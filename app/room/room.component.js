@@ -15,7 +15,8 @@ angular.
           rows.forEach(function(row) {
             messages.push({ "room":row.doc.room, "datetime":row.doc.datetime, "username":row.doc.user, "message":row.doc.message })  
           });
-	  
+
+	  self.room = $scope.$parent.room.name;
           self.messages = messages;
 	});
       }
