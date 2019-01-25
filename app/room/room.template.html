@@ -19,9 +19,23 @@
   </div>
 
   <div class="chat-message clearfix">
-    <form>
-      <textarea name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3" ng-model="newmessage"></textarea>
-      <button ng-click="send(newmessage)">Send</button>
+    <form name="messageform" novalidate>
+      <label for="username">Username: </label>
+      <input type="text" name="username" ng-model="username" ng-change="setUsername(username)" required ng-minlength="1" />
+      <ng-messages for="messageform.username.$error" ng-show="messageform.username.$invalid">
+	<ng-message when="required">This field is required</ng-message>
+      </ng-messages>
+
+      <br />
+      
+      <textarea name="message" id="message" placeholder ="Type your message" rows="3" ng-model="newmessage" required ng-minlength="1"></textarea>
+      <ng-messages for="messageform.message.$error" ng-show="messageform.message.$invalid">
+	<ng-message when="required">This field is required</ng-message>
+      </ng-messages>
+
+      <br />
+      
+      <button ng-click="send(newmessage)" ng-disabled="messageform.$invalid">Send</button>
     </form>
   </div>  
 </div>

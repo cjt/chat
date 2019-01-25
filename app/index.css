@@ -20,19 +20,6 @@ body {
   border-radius: 5px;
 }
 
-.username {
-  font-size: 20px;
-  padding: 10px;
-}
-
-.username input {
-  width: 20%;
-  border: none;
-  padding: 10px 10px 10px 10px;
-  border-radius: 5px;
-  resize: none;
-}
-
 .room-list {
   width: 200px;
   float: left;
@@ -139,8 +126,20 @@ body {
   padding: 10px;
 }
 
+.room .chat-message label {
+  font-size: 16px;
+}
+
+.room .chat-message input {
+  width: 20%;
+  border: none;
+  padding: 10px 10px 10px 10px;
+  border-radius: 5px;
+  resize: none;
+}
+
 .room .chat-message textarea {
-  width: 85%;
+  width: 60%;
   border: none;
   padding: 10px 20px;
   font: 14px/22px "Lato", Arial, sans-serif;
@@ -150,7 +149,6 @@ body {
 }
 
 .room .chat-message button {
-  float: right;
   color: $blue;
   font-size: 16px;
   text-transform: uppercase;

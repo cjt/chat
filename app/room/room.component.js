@@ -21,7 +21,7 @@ angular.
 	return messages.sort(compareOnDatetime);
       };
       
-      $scope.$parent.loadMessages = function () {
+      var loadMessages = () => {
 	$http.get('http://127.0.0.1:5984/chat/_design/messages/_view/messages?key=\"' + $scope.$parent.room.name + '\"&include_docs=true').then(function(response) {
           var rows = response.data.rows;
           var messages = [];
@@ -34,5 +34,7 @@ angular.
           self.messages = sortMessages(messages);
 	});
       }
+
+      $scope.$parent.loadMessages = loadMessages;
     }]
   });
