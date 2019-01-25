@@ -4,7 +4,7 @@ angular.
   module('room').
   component('room', {
     templateUrl: 'room/room.template.html',
-    controller: ['$http', '$scope', function RoomController($http, $scope) {
+    controller: ['$http', '$scope', '$interval', function RoomController($http, $scope, $interval) {
       var self = this;
 
       $scope.send = function (username, newmessage) {
@@ -36,5 +36,9 @@ angular.
       }
 
       $scope.$parent.loadMessages = loadMessages;
+
+      $interval(() => {
+	loadMessages();
+      }, 250);
     }]
   });
