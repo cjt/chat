@@ -22,6 +22,10 @@ angular
             rooms.push({ "name":row.key, "messages":row.value })
           });
 
+	  if ($scope.$parent.room == null) {
+	    $scope.select(rooms[0]);
+	  }
+
           self.rooms = rooms;
 	});
       }
