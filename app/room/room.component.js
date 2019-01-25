@@ -7,13 +7,13 @@ angular.
     controller: ['$http', '$scope', function RoomController($http, $scope) {
       var self = this;
 
-      $scope.send = function (newmessage) {
+      $scope.send = function (username, newmessage) {
 	var datetime = (new Date()).toISOString().slice(0, 23).replace("T", " "); // TODO break out common code, date format is important
-	$http.post('http://127.0.0.1:5984/chat/', JSON.stringify({ "room":$scope.$parent.room.name, "user":$scope.$parent.username, "datetime":datetime, "message":newmessage })).
+	$http.post('http://127.0.0.1:5984/chat/', JSON.stringify({ "room":$scope.$parent.room.name, "user":username, "datetime":datetime, "message":newmessage })).
 	  then(function(response) {
 	    newmessage = '';
 	    $scope.$parent.loadMessages();
-	  })
+	  });
       };
 
       var sortMessages = function(messages) {
