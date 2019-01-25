@@ -15,6 +15,11 @@ angular.
 	    $scope.$parent.loadMessages();
 	  })
       };
+
+      var sortMessages = function(messages) {
+	var compareOnDatetime = (a, b) => (a.datetime < b.datetime) ? -1 : (a.datetime > b.datetime) ? 1 : 0;
+	return messages.sort(compareOnDatetime);
+      };
       
       $scope.$parent.loadMessages = function () {
 	$http.get('http://127.0.0.1:5984/chat/_design/messages/_view/messages?key=\"' + $scope.$parent.room.name + '\"&include_docs=true').then(function(response) {
@@ -26,7 +31,7 @@ angular.
           });
 	  
 	  self.room = $scope.$parent.room.name;
-          self.messages = messages;
+          self.messages = sortMessages(messages);
 	});
       }
     }]
