@@ -19,8 +19,10 @@
   </div>
 
   <div class="chat-message clearfix">
-    <textarea name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3"></textarea>
-    <button>Send</button>
+    <form>
+      <textarea name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3" ng-model="newmessage"></textarea>
+      <button ng-click="send(newmessage)">Send</button>
+    </form>
   </div>  
 </div>
 
