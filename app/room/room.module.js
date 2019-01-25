@@ -1,5 +1,5 @@
 'use strict';
 
 angular.module('room', [
-  'ngRoute'
+  'luegg.directives'
 ]);
