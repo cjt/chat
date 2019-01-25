@@ -57,6 +57,15 @@ else
   exit -1
 fi
 
+# Create the room filter
+STATUS=`curl -X PUT $URL/$DB/_design/filters -d '{ "_id": "_design/filters", "filters": { "room": "function (doc, req) { if (doc.room && req.query.room && doc.room == req.query.room) { return true; } else { return false; } }" } }' -H 'Content-Type: application/json' $AUTH -o /dev/null -w '%{http_code}' -s`
+if [[ "$STATUS" -eq 201 ]]; then
+  echo "Created room filter"
+else
+  echo "Error creating room filter:" $STATUS
+  exit -1
+fi
+
 # Query for all rooms and count of messages in them
 #curl -X GET http://127.0.0.1:5984/chat1/_design/rooms/_view/rooms?group=true
 
