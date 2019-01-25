@@ -26,6 +26,8 @@ angular
 	});
       }
 
+      loadRoomList();
+
       $interval(function() {
 	loadRoomList();
       }, 500);
