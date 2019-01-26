@@ -14,7 +14,9 @@
   </ul>
   
   <div class="room-create" id="room-create">
-    <input type="text" placeholder="room" />
-    <button>Create</button>
+    <form name="roomcreateform" novalidate>
+      <input type="text" placeholder="room" ng-model="newroom" required ng-minlength="1" />
+      <button ng-click="create(newroom)" ng-disabled="roomcreateform.$invalid">Create</button>
+    </form>
   </div>
 </div>

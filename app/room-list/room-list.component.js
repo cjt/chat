@@ -32,6 +32,14 @@ angular
 
       loadRoomList();
 
+      $scope.create = (newroom) => {
+	var datetime = (new Date()).toISOString().slice(0, 23).replace("T", " ");
+	$http.post('http://127.0.0.1:5984/chat/', JSON.stringify({ "room":newroom, "user":"", "datetime":datetime, "message":"Welcome to your new room!" })).
+	  then(function(response) {
+	    loadRoomList();
+	  });
+      };
+      
       $interval(function() {
 	loadRoomList();
       }, 500);
