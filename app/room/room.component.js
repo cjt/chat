@@ -4,12 +4,12 @@ angular.
   module('room').
   component('room', {
     templateUrl: 'room/room.template.html',
-    controller: ['$http', '$scope', '$interval', function RoomController($http, $scope, $interval) {
+    controller: ['$http', '$scope', '$interval', 'roomState', function RoomController($http, $scope, $interval, roomState) {
       var self = this;
 
       $scope.send = (username, newmessage) => {
 	const datetime = (new Date()).toISOString().slice(0, 23).replace("T", " "); // TODO break out common code, date format is important
-	$http.post('http://127.0.0.1:5984/chat/', JSON.stringify({ "room":$scope.$parent.room.name, "user":username, "datetime":datetime, "message":newmessage })).
+	$http.post('http://127.0.0.1:5984/chat/', JSON.stringify({ "room":roomState.room.name, "user":username, "datetime":datetime, "message":newmessage })).
 	  then((response) => {
 	    newmessage = '';
 	    $scope.$parent.loadMessages();
@@ -17,7 +17,7 @@ angular.
       };
       
       $scope.$parent.loadMessages = () => {
-	$http.get('http://127.0.0.1:5984/chat/_design/messages/_view/messages?key=\"' + $scope.$parent.room.name + '\"&include_docs=true').then(function(response) {
+	$http.get('http://127.0.0.1:5984/chat/_design/messages/_view/messages?key=\"' + roomState.room.name + '\"&include_docs=true').then(function(response) {
           let rows = response.data.rows;
           let messages = [];
 	  
@@ -30,13 +30,15 @@ angular.
 	    messages.push({ "room":row.doc.room, "datetime":row.doc.datetime, "username":row.doc.user, "message":row.doc.message });
 	  });
 	  
-	  self.room = $scope.$parent.room.name;
+	  self.room = roomState.room.name;
           self.messages = sortMessages(messages);
 	});
       }
 
       $interval(() => {
-	$scope.$parent.loadMessages();
+	if (roomState.room != null) {
+	  $scope.$parent.loadMessages();
+	}
       }, 250);
     }]
   });

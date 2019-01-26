@@ -1,3 +1,5 @@
 'use strict';
 
-angular.module('roomList', []);
+angular.module('roomList', [
+  'state.service'
+]);

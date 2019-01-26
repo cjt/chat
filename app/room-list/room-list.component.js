@@ -4,9 +4,9 @@ angular
   .module('roomList')
   .component('roomList', {
     templateUrl: 'room-list/room-list.template.html',
-    controller: ['$http', '$scope', '$interval', function roomListController($http, $scope, $interval) {
+    controller: ['$http', '$scope', '$interval', 'roomState', function roomListController($http, $scope, $interval, roomState) {
       $scope.select = function(room) {
-	$scope.$parent.room = room;
+	roomState.room = room;
 	$scope.$parent.loadMessages();
       };
       
@@ -21,7 +21,7 @@ angular
             rooms.push({ "name":row.key, "messages":row.value })
           });
 
-	  if ($scope.$parent.room == null) {
+	  if (roomState.room == null) {
 	    $scope.select(rooms[0]);
 	  }
 
