@@ -11,8 +11,8 @@ angular.
 	const datetime = (new Date()).toISOString().slice(0, 23).replace("T", " "); // TODO break out common code, date format is important
 	$http.post('http://127.0.0.1:5984/chat/', JSON.stringify({ "room":roomState.room.name, "user":username, "datetime":datetime, "message":newmessage })).
 	  then((response) => {
-	    newmessage = '';
-	    $scope.$parent.loadMessages();
+	    self.newmessage = '';
+	    roomState.reloadMessages();
 	  });
       };
       
