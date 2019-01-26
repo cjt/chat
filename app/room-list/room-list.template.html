@@ -4,9 +4,9 @@
     
     <li ng-repeat="room in $ctrl.rooms"  class="clearfix">
       <div class="about" ng-click="select(room)">
-        <a href="#!/rooms/{{room.name}}">
+	<a href="#">
           <span class="name">{{room.name}}</span>
-        </a>
+	</a>
         <span class="num-users">({{room.messages}} messages)</span>
       </div>  
     </li>

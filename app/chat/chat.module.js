@@ -2,6 +2,5 @@
 
 angular.module('chat', [
   'roomList',
-  'room',
-  'userList'
+  'room'
 ]);

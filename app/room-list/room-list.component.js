@@ -8,17 +8,16 @@ angular
       $scope.select = function(room) {
 	$scope.$parent.room = room;
 	$scope.$parent.loadMessages();
-	console.log("Selected room: " + $scope.$parent.room.name);
       };
       
-      var self = this;
+      let self = this;
 
-      var loadRoomList = function() {      
+      let loadRoomList = function() {      
 	$http.get('http://localhost:5984/chat/_design/rooms/_view/rooms?group=true').then(function(response) {
-          var rows = response.data.rows;
-          var rooms = [];
+          let rows = response.data.rows;
+          let rooms = [];
 
-          rows.forEach(function(row) {
+          rows.forEach((row) => {
             rooms.push({ "name":row.key, "messages":row.value })
           });
 
@@ -33,9 +32,9 @@ angular
       loadRoomList();
 
       $scope.create = (newroom) => {
-	var datetime = (new Date()).toISOString().slice(0, 23).replace("T", " ");
+	const datetime = (new Date()).toISOString().slice(0, 23).replace("T", " ");
 	$http.post('http://127.0.0.1:5984/chat/', JSON.stringify({ "room":newroom, "user":"", "datetime":datetime, "message":"Welcome to your new room!" })).
-	  then(function(response) {
+	  then((response) => {
 	    loadRoomList();
 	  });
       };

@@ -7,38 +7,36 @@ angular.
     controller: ['$http', '$scope', '$interval', function RoomController($http, $scope, $interval) {
       var self = this;
 
-      $scope.send = function (username, newmessage) {
-	var datetime = (new Date()).toISOString().slice(0, 23).replace("T", " "); // TODO break out common code, date format is important
+      $scope.send = (username, newmessage) => {
+	const datetime = (new Date()).toISOString().slice(0, 23).replace("T", " "); // TODO break out common code, date format is important
 	$http.post('http://127.0.0.1:5984/chat/', JSON.stringify({ "room":$scope.$parent.room.name, "user":username, "datetime":datetime, "message":newmessage })).
-	  then(function(response) {
+	  then((response) => {
 	    newmessage = '';
 	    $scope.$parent.loadMessages();
 	  });
       };
-
-      var sortMessages = function(messages) {
-	var compareOnDatetime = (a, b) => (a.datetime < b.datetime) ? -1 : (a.datetime > b.datetime) ? 1 : 0;
-	return messages.sort(compareOnDatetime);
-      };
       
-      var loadMessages = () => {
+      $scope.$parent.loadMessages = () => {
 	$http.get('http://127.0.0.1:5984/chat/_design/messages/_view/messages?key=\"' + $scope.$parent.room.name + '\"&include_docs=true').then(function(response) {
-          var rows = response.data.rows;
-          var messages = [];
+          let rows = response.data.rows;
+          let messages = [];
 	  
-          rows.forEach(function(row) {
-            messages.push({ "room":row.doc.room, "datetime":row.doc.datetime, "username":row.doc.user, "message":row.doc.message })  
-          });
+	  let sortMessages = function(messages) {
+	    let compareOnDatetime = (a, b) => (a.datetime < b.datetime) ? -1 : (a.datetime > b.datetime) ? 1 : 0;
+	    return messages.sort(compareOnDatetime);
+	  };
+
+	  rows.forEach((row) => {
+	    messages.push({ "room":row.doc.room, "datetime":row.doc.datetime, "username":row.doc.user, "message":row.doc.message });
+	  });
 	  
 	  self.room = $scope.$parent.room.name;
           self.messages = sortMessages(messages);
 	});
       }
 
-      $scope.$parent.loadMessages = loadMessages;
-
       $interval(() => {
-	loadMessages();
+	$scope.$parent.loadMessages();
       }, 250);
     }]
   });
