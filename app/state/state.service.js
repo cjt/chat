@@ -4,6 +4,9 @@ angular
   .module('state.service')
   .factory('roomState', function() {
     return {
-      room: null // Current selected room
+      // Current selected room
+      room: null,
+      // Function for reloading messages
+      reloadMessages: null
     };
 });

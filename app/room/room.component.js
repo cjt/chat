@@ -16,7 +16,7 @@ angular.
 	  });
       };
       
-      $scope.$parent.loadMessages = () => {
+      roomState.reloadMessages = () => {
 	$http.get('http://127.0.0.1:5984/chat/_design/messages/_view/messages?key=\"' + roomState.room.name + '\"&include_docs=true').then(function(response) {
           let rows = response.data.rows;
           let messages = [];
@@ -36,8 +36,8 @@ angular.
       }
 
       $interval(() => {
-	if (roomState.room != null) {
-	  $scope.$parent.loadMessages();
+	if (roomState.room != null && roomState.reloadMessages != null) {
+	  roomState.reloadMessages();
 	}
       }, 250);
     }]

@@ -7,7 +7,10 @@ angular
     controller: ['$http', '$scope', '$interval', 'roomState', function roomListController($http, $scope, $interval, roomState) {
       $scope.select = function(room) {
 	roomState.room = room;
-	$scope.$parent.loadMessages();
+
+	if (roomState.reloadMessages != null) {
+	  roomState.reloadMessages();
+	}
       };
       
       let self = this;
