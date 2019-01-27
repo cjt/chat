@@ -21,19 +21,19 @@ fi
 #
 # Post some documents
 #
-STATUS=`curl -X POST $URL/$DB -d '{"room":"Mountain Rescue","user":"cjt","datetime":"2019-01-23 10:32:22.234","message":"Anyone about this morning?"}' -H 'Content-Type:application/json' $AUTH -o /dev/null -w '%{http_code}' -s`
+STATUS=`curl -X POST $URL/$DB -d '{"room":"Room 1","user":"cjt","datetime":"2019-01-23 10:32:22.234","message":"Anyone about this morning?"}' -H 'Content-Type:application/json' $AUTH -o /dev/null -w '%{http_code}' -s`
 if [[ "$STATUS" -ne 201 ]]; then
   echo "Error posting data:" $STATUS
   exit -1
 fi
 
-STATUS=`curl -X POST $URL/$DB -d '{"room":"Mountain Rescue","user":"dave","datetime":"2019-01-23 10:33:58.987","message":"Hey good morning."}' -H 'Content-Type:application/json' $AUTH -o /dev/null -w '%{http_code}' -s`
+STATUS=`curl -X POST $URL/$DB -d '{"room":"Room 1","user":"dave","datetime":"2019-01-23 10:33:58.987","message":"Hey good morning."}' -H 'Content-Type:application/json' $AUTH -o /dev/null -w '%{http_code}' -s`
 if [[ "$STATUS" -ne 201 ]]; then
   echo "Error posting data:" $STATUS
   exit -1
 fi
 
-STATUS=`curl -X POST $URL/$DB -d '{"room":"RNLI","user":"bill","datetime":"2019-01-23 10:21:34.827","message":"Arr me hearties."}' -H 'Content-Type:application/json' $AUTH -o /dev/null -w '%{http_code}' -s`
+STATUS=`curl -X POST $URL/$DB -d '{"room":"Room 2","user":"bill","datetime":"2019-01-23 10:21:34.827","message":"Arr me hearties."}' -H 'Content-Type:application/json' $AUTH -o /dev/null -w '%{http_code}' -s`
 if [[ "$STATUS" -ne 201 ]]; then
   echo "Error posting data:" $STATUS
   exit -1
