@@ -36,7 +36,7 @@ angular
       loadRoomList();
 
       $scope.create = (newroom) => {
-	const datetime = (new Date()).toISOString().slice(0, 23).replace("T", " ");
+	const datetime = CHAT_CONFIG.nowString();
 	const room = JSON.stringify({ "room":newroom, "user":"", "datetime":datetime, "message":"Welcome to your new room!" });
 	const uri = `${CHAT_CONFIG.url}/${CHAT_CONFIG.db}`;
 	$http.post(uri, room).then((response) => {

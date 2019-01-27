@@ -8,7 +8,7 @@ angular.
       var self = this;
 
       $scope.send = (username, newmessage) => {
-	const datetime = (new Date()).toISOString().slice(0, 23).replace("T", " "); // TODO break out common code, date format is important
+	const datetime = CHAT_CONFIG.nowString();
 	const message = JSON.stringify({ "room":roomState.room.name, "user":username, "datetime":datetime, "message":newmessage });
 	$http.post(`${CHAT_CONFIG.url}/${CHAT_CONFIG.db}`, message).
 	  then((response, message) => {
