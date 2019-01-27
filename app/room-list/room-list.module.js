@@ -1,5 +1,6 @@
 'use strict';
 
 angular.module('roomList', [
-  'state.service'
+  'state.service',
+  'config'
 ]);
