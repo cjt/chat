@@ -40,8 +40,9 @@ angular
 	const room = JSON.stringify({ "room":newroom, "user":"", "datetime":datetime, "message":"Welcome to your new room!" });
 	const uri = `${CHAT_CONFIG.url}/${CHAT_CONFIG.db}`;
 	$http.post(uri, room).then((response) => {
-	    loadRoomList();
-	  });
+	  loadRoomList();
+	  $scope.newroom = '';
+	});
       };
       
       $interval(function() {

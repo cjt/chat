@@ -28,8 +28,8 @@
 
       <br />
       
-      <textarea name="message" id="message" placeholder ="Type your message" rows="3" ng-model="newmessage" required ng-minlength="1"></textarea>
-      <ng-messages for="messageform.message.$error" ng-show="messageform.message.$invalid">
+      <textarea name="newmessage" id="newmessage" placeholder ="Type your message" rows="3" ng-model="newmessage" required ng-minlength="1"></textarea>
+      <ng-messages for="messageform.newmessage.$error" ng-show="messageform.newmessage.$invalid">
 	<ng-message when="required">This field is required</ng-message>
       </ng-messages>
 

@@ -12,7 +12,7 @@ angular.
 	const message = JSON.stringify({ "room":roomState.room.name, "user":username, "datetime":datetime, "message":newmessage });
 	$http.post(`${CHAT_CONFIG.url}/${CHAT_CONFIG.db}`, message).
 	  then((response, message) => {
-	    self.newmessage = '';
+	    $scope.newmessage = '';
 	    roomState.reloadMessages();
 	  });
       };
