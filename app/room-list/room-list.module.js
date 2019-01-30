@@ -2,5 +2,6 @@
 
 angular.module('roomList', [
   'state.service',
-  'config'
+  'config',
+  'btford.socket-io'
 ]);

@@ -4,21 +4,28 @@ angular.
   module('room').
   component('room', {
     templateUrl: 'room/room.template.html',
-    controller: ['$http', '$scope', '$interval', 'roomState', 'CHAT_CONFIG', function RoomController($http, $scope, $interval, roomState, CHAT_CONFIG) {
-      var self = this;
+    controller: ['$http', '$scope', '$interval', 'roomState', 'CHAT_CONFIG', 'chatSocket', function RoomController($http, $scope, $interval, roomState, CHAT_CONFIG, chatSocket) {
+      var vm = this;
 
-      $scope.send = (username, newmessage) => {
+      vm.send = (username, newmessage) => {
 	const datetime = CHAT_CONFIG.nowString();
-	const message = JSON.stringify({ "room":roomState.room.name, "user":username, "datetime":datetime, "message":newmessage });
-	$http.post(`${CHAT_CONFIG.url}/${CHAT_CONFIG.db}`, message).
-	  then((response, message) => {
-	    $scope.newmessage = '';
-	    roomState.reloadMessages();
-	  });
+	const message = { "room":roomState.room.name, "datetime":datetime, "username":username, "message":newmessage };
+	const messageStr = JSON.stringify(message);
+
+	chatSocket.emit('newmessage', message, () => {
+	  console.log(`Emitted newmessage: ${message}`);
+	  vm.newmessage = '';
+	});
+	
+	//$http.post(`${CHAT_CONFIG.url}/api/message`, message).
+	//  then((response, message) => {
+	//    $scope.newmessage = '';
+	//    roomState.reloadMessages();
+	//  });
       };
       
-      roomState.reloadMessages = () => {
-	const uri = `${CHAT_CONFIG.url}/${CHAT_CONFIG.db}/_design/messages/_view/messages?key=\"${roomState.room.name}\"&include_docs=true`;
+      const loadMessages = () => {
+	const uri = `${CHAT_CONFIG.url}/api/room/RNLI`; //${roomState.room.name}`;
 	$http.get(uri).then(function(response) {
           let rows = response.data.rows;
           let messages = [];
@@ -32,15 +39,20 @@ angular.
 	    messages.push({ "room":row.doc.room, "datetime":row.doc.datetime, "username":row.doc.user, "message":row.doc.message });
 	  });
 	  
-	  self.room = roomState.room.name;
-          self.messages = sortMessages(messages);
+	  vm.room = 'RNLI'; //roomState.room.name;
+          vm.messages = sortMessages(messages);
 	});
-      }
+      };
 
-      $interval(() => {
-	if (roomState.room != null && roomState.reloadMessages != null) {
-	  roomState.reloadMessages();
-	}
-      }, 250);
+      loadMessages();
+
+      chatSocket.on('chatmessage', (message) => {
+	console.log(`chatmessage: ${message}`);
+	vm.messages.push(message);
+      });
+
+      $scope.$on('$destroy', (event) => {
+	chatSocket.removeAllListeners();
+      });
     }]
   });

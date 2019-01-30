@@ -1,5 +1,6 @@
 'use strict';
 
 angular.module('chatApp', [
-  'chat'
+  'chat',
+  'btford.socket-io'
 ]);
