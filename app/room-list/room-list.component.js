@@ -4,9 +4,12 @@ angular
   .module('roomList')
   .component('roomList', {
     templateUrl: 'room-list/room-list.template.html',
-    controller: ['$http', '$scope', '$interval', 'roomState', 'CHAT_CONFIG', function roomListController($http, $scope, $interval, roomState, CHAT_CONFIG) {
+    controller: ['$http', '$scope', '$interval', 'roomState', 'CHAT_CONFIG', 'chatSocket', function roomListController($http, $scope, $interval, roomState, CHAT_CONFIG, chatSocket) {
       $scope.select = function(room) {
 	roomState.room = room;
+
+	console.log(`Joining room ${room.name}`);
+	chatSocket.emit('joinroom', room.name);
 
 	if (roomState.reloadMessages != null) {
 	  roomState.reloadMessages();

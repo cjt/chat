@@ -6,26 +6,9 @@ angular.
     templateUrl: 'room/room.template.html',
     controller: ['$http', '$scope', '$interval', 'roomState', 'CHAT_CONFIG', 'chatSocket', function RoomController($http, $scope, $interval, roomState, CHAT_CONFIG, chatSocket) {
       var vm = this;
-
-      vm.send = (username, newmessage) => {
-	const datetime = CHAT_CONFIG.nowString();
-	const message = { "room":roomState.room.name, "datetime":datetime, "username":username, "message":newmessage };
-	const messageStr = JSON.stringify(message);
-
-	chatSocket.emit('newmessage', message, () => {
-	  console.log(`Emitted newmessage: ${message}`);
-	  vm.newmessage = '';
-	});
-	
-	//$http.post(`${CHAT_CONFIG.url}/api/message`, message).
-	//  then((response, message) => {
-	//    $scope.newmessage = '';
-	//    roomState.reloadMessages();
-	//  });
-      };
       
-      const loadMessages = () => {
-	const uri = `${CHAT_CONFIG.url}/api/room/RNLI`; //${roomState.room.name}`;
+      roomState.reloadMessages = () => {
+	const uri = `${CHAT_CONFIG.url}/api/room/${roomState.room.name}`;
 	$http.get(uri).then(function(response) {
           let rows = response.data.rows;
           let messages = [];
@@ -39,16 +22,30 @@ angular.
 	    messages.push({ "room":row.doc.room, "datetime":row.doc.datetime, "username":row.doc.user, "message":row.doc.message });
 	  });
 	  
-	  vm.room = 'RNLI'; //roomState.room.name;
+	  vm.room = roomState.room.name;
           vm.messages = sortMessages(messages);
 	});
       };
 
-      loadMessages();
+      vm.send = (username, newmessage) => {
+	const datetime = CHAT_CONFIG.nowString();
+	const message = { "room":roomState.room.name, "datetime":datetime, "username":username, "message":newmessage };
+	const messageStr = JSON.stringify(message);
 
+	chatSocket.emit('newmessage', message, () => {
+	  console.log(`Emitted newmessage: ${JSON.stringify(message)}`);
+	  vm.newmessage = '';
+	});
+      };
+      
       chatSocket.on('chatmessage', (message) => {
-	console.log(`chatmessage: ${message}`);
-	vm.messages.push(message);
+	if (message.room === roomState.room.name) {
+	  console.log(`chatmessage: ${JSON.stringify(message)}`);
+	  vm.messages.push(message);
+	}
+	else {
+	  console.error(`Got message for ${message.room} in error: ${JSON.stringify(message)}`);
+	}
       });
 
       $scope.$on('$destroy', (event) => {

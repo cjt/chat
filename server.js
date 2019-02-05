@@ -64,18 +64,38 @@ app.post('/api/message', (request, response) => {
 //
 
 io.sockets.on('connect', (socket) => {
-  console.log('New user connection');
+  console.log(`User ${socket.id} connected`);
 
-  socket.on('newmessage', function (message) {
-    console.log(`newmessage: ${JSON.stringify(message)}`);
-    io.sockets.emit('chatmessage', message);
+  // joinroom event allows a client to join an arbitrary room. The client will be evicted from all rooms it belongs to except it's 'direct message' room.
+  socket.on('joinroom', (room) => {
+    let currentRooms = Object.keys(socket.rooms).filter(room => room !== socket.id);
+    console.debug(`User ${socket.id} leaving ${currentRooms.join(', ')}`);
+    currentRooms.forEach((currentRoom) => {
+      socket.leave(currentRoom);
+    });
+
+    console.debug(`User ${socket.id} joining ${room}`);
+    socket.join(room);
   });
 
-  socket.on('newroom', (newroom) => {
-    console.log(`newroom: ${newroom}`);
-    io.emit('newroom', newroom);
+  // newmessage event allows a client to post a message. On successful persistence it will be emitted to the room to which it belongs via the chatmessage event.
+  socket.on('newmessage', (message) => {
+    db.insert(message).then((response) => {
+      if (response.ok) {
+	console.debug(`Message from ${socket.id} for ${message.room}: ${JSON.stringify(message)}`);
+	io.in(message.room).emit('chatmessage', message);
+      }
+      else {
+	console.error(`Error saving message from ${socket.id}: ${JSON.stringify(response)}`);
+      }
+    });
   });
   
+//  socket.on('newroom', (newroom) => {
+//    console.log(`newroom: ${newroom}`);
+//    io.emit('newroom', newroom);
+//  });
+
 //  stream(socket).on('message', (s, data) => {
 //    db.changes(dbName, { filter: "filters/room",
 //			 room: data.name,
@@ -88,13 +108,14 @@ io.sockets.on('connect', (socket) => {
   });
 });
 
-let i = 1;
-setInterval(() => {
-  const datetime = (new Date()).toISOString().slice(0, 23).replace("T", " ");
-  const message = { "room":"RNLI", "datetime":datetime, "username":"server", "message":`server message ${i}` };
-  console.log(`Emitting message ${i}...`);
-  io.sockets.emit('chatmessage', message);
-  i++;
-}, 3000);
+// Timelooped emitter spitting messages out to a room
+//let i = 1;
+//setInterval(() => {
+//  const datetime = (new Date()).toISOString().slice(0, 23).replace("T", " ");
+//  const message = { "room":"RNLI", "datetime":datetime, "username":"server", "message":`server message ${i}` };
+//  console.log(`Emitting message ${i}...`);
+//  io.sockets.emit('chatmessage', message);
+//  i++;
+//}, 3000);
 
 http.listen(port, () => { console.log(`Listening on port ${port}...`); });
