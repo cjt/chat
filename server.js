@@ -118,7 +118,7 @@ io.sockets.on('connect', (socket) => {
   });
   
   socket.on('newroom', (newroom) => {
-    console.log(`newroom from ${socket.id}: ${newroom}`);
+    console.log(`newroom from ${socket.id}: ${JSON.stringify(newroom)}`);
     db.insert(newroom).then((response) => {
       if (response.ok) {
 	rooms.set(newroom.room, 0);

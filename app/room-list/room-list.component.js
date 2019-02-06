@@ -11,11 +11,6 @@ angular
       chatSocket.on('roomstate', (rooms) => {
 	console.log(`Updating roomstate: ${rooms.length} rooms`);
 	self.rooms = rooms;
-
-//	if (roomState.room === null) {
-//	  let firstroom = Array.from(rooms.keys())[0];
-//	  $scope.select(firstroom);
-//	}
       });
 
       $scope.select = function(room) {
@@ -31,8 +26,7 @@ angular
       
       $scope.create = (newroom) => {
 	const datetime = CHAT_CONFIG.nowString();
-	const room = JSON.stringify({ "room":newroom, "user":"", "datetime":datetime, "message":"Welcome to your new room!" });
-	const uri = `${CHAT_CONFIG.url}/api/room/new`;
+	const room = { "room":newroom, "user":"", "datetime":datetime, "message":"Welcome to your new room!" };
 	chatSocket.emit('newroom', room, () => {
 	  console.log(`Emitted newroom: ${JSON.stringify(room)}`);
 	  $scope.newroom = '';
