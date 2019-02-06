@@ -6,11 +6,11 @@ angular.
     templateUrl: 'room/room.template.html',
     controller: ['$http', '$scope', '$interval', 'roomState', 'CHAT_CONFIG', 'chatSocket', function RoomController($http, $scope, $interval, roomState, CHAT_CONFIG, chatSocket) {
       var vm = this;
-      
-      roomState.reloadMessages = () => {
-	const uri = `${CHAT_CONFIG.url}/api/room/${roomState.room.name}`;
+
+      chatSocket.on('chathistory', (room) => {
+	const uri = `${CHAT_CONFIG.url}/api/room/${room}`;
 	$http.get(uri).then(function(response) {
-          let rows = response.data.rows;
+	  let rows = response.data.rows;
           let messages = [];
 	  
 	  let sortMessages = function(messages) {
@@ -22,14 +22,14 @@ angular.
 	    messages.push({ "room":row.doc.room, "datetime":row.doc.datetime, "username":row.doc.user, "message":row.doc.message });
 	  });
 	  
-	  vm.room = roomState.room.name;
+	  vm.room = room;
           vm.messages = sortMessages(messages);
 	});
-      };
+      });
 
       vm.send = (username, newmessage) => {
 	const datetime = CHAT_CONFIG.nowString();
-	const message = { "room":roomState.room.name, "datetime":datetime, "username":username, "message":newmessage };
+	const message = { "room":vm.room, "datetime":datetime, "username":username, "message":newmessage };
 	const messageStr = JSON.stringify(message);
 
 	chatSocket.emit('newmessage', message, () => {
@@ -39,7 +39,7 @@ angular.
       };
       
       chatSocket.on('chatmessage', (message) => {
-	if (message.room === roomState.room.name) {
+	if (message.room === vm.room) {
 	  console.log(`chatmessage: ${JSON.stringify(message)}`);
 	  vm.messages.push(message);
 	}
