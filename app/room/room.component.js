@@ -6,6 +6,8 @@ angular.
     templateUrl: 'room/room.template.html',
     controller: ['$http', 'CHAT_CONFIG', 'chatSocket', function RoomController($http, CHAT_CONFIG, chatSocket) {
       var vm = this;
+
+      vm.messages = [];
       
       vm.send = sendNewMessage;
 
@@ -16,20 +18,17 @@ angular.
       function loadChatHistory(room) {
 	const uri = `${CHAT_CONFIG.url}/api/room/${room}`;
 	$http.get(uri).then(function(response) {
+	  vm.messages = [];
+
 	  let rows = response.data.rows;
-          let messages = [];
-	  
-	  let sortMessages = function(messages) {
-	    let compareOnDatetime = (a, b) => (a.datetime < b.datetime) ? -1 : (a.datetime > b.datetime) ? 1 : 0;
-	    return messages.sort(compareOnDatetime);
-	  };
+	  const compareOnDatetime = (a, b) => (a.datetime < b.datetime) ? -1 : (a.datetime > b.datetime) ? 1 : 0;
 
 	  rows.forEach((row) => {
-	    messages.push({ "room":row.doc.room, "datetime":row.doc.datetime, "username":row.doc.user, "message":row.doc.message });
+	    vm.messages.push({ "room":row.doc.room, "datetime":row.doc.datetime, "username":row.doc.user, "message":row.doc.message });
 	  });
 	  
 	  vm.room = room;
-          vm.messages = sortMessages(messages);
+	  vm.messages.sort(compareOnDatetime);
 	});
       }
 
