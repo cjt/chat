@@ -11,6 +11,8 @@ Sections:
 
 Chat is a simple pseudo-anonymous AngularJs chat room, built as a learning tool to explore AngularJs and CouchDb.
 
+**Warning:** There are as yet no tests, and the code is messy: this is intentional and it will likely remain like this for a while. As such don't use this code as a basis for anything.
+
 ## Installation notes
 
 Modify the database setup script in db/dbsetup.sh to the appropriate $URL and $AUTH parameters, and execute it to create the db and seed the necessary documents. It may be necessary to enable CORS for all domains.
