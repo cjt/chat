@@ -4,7 +4,7 @@ angular.
   module('room').
   component('room', {
     templateUrl: 'room/room.template.html',
-    controller: ['$http', '$scope', '$interval', 'roomState', 'CHAT_CONFIG', 'chatSocket', function RoomController($http, $scope, $interval, roomState, CHAT_CONFIG, chatSocket) {
+    controller: ['$http', '$scope', '$interval', 'CHAT_CONFIG', 'chatSocket', function RoomController($http, $scope, $interval, CHAT_CONFIG, chatSocket) {
       var vm = this;
 
       chatSocket.on('chathistory', (room) => {
@@ -33,14 +33,14 @@ angular.
 	const messageStr = JSON.stringify(message);
 
 	chatSocket.emit('newmessage', message, () => {
-	  console.log(`Emitted newmessage: ${JSON.stringify(message)}`);
+	  console.debug(`Emitted newmessage: ${JSON.stringify(message)}`);
 	  vm.newmessage = '';
 	});
       };
       
       chatSocket.on('chatmessage', (message) => {
 	if (message.room === vm.room) {
-	  console.log(`chatmessage: ${JSON.stringify(message)}`);
+	  console.debug(`chatmessage: ${JSON.stringify(message)}`);
 	  vm.messages.push(message);
 	}
 	else {

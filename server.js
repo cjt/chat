@@ -26,23 +26,7 @@ const stream = require('socket.io-stream');
 const nano = require('nano')(`${couchDbUrl}`);
 const db = nano.db.use(dbName);
 
-// console.log(`room: ${room}, datetime:${datetime}, username:${username}, message:${message}`);
-
-//
 // Static routes
-//
-
-app.get('/api/rooms', (request, response) => {
-  db.view('rooms', 'rooms', { group:true }).then((body) => {
-    response.send(body);
-  });
-});
-
-app.post('/api/room/new', (request, response) => {
-  db.insert(request.body).then((body) => {
-    response.send(body);
-  });
-});
 
 app.get('/api/room/:name', (request, response) => {
   const roomName = request.params.name;
@@ -54,22 +38,15 @@ app.get('/api/room/:name', (request, response) => {
   });
 });
 
-app.post('/api/message', (request, response) => {
-  db.insert(request.body).then((body) => {
-    response.send(body);
-  });
-});
-
-// Server State
-
+// Maintain state, a map of Room to User count. Modified by clients joining and leaving rooms. Might eventually ideally need a mutex to prevent bogus states.
 let rooms = new Map();
 db.view('rooms', 'rooms', { group:true }).then((body) => {
   body.rows.forEach((row) => {
     rooms.set(row.key, 0);
   });
-  console.debug(`Loaded rooms: ${Array.from(rooms.keys()).join()}`);
 });
 
+// Angulars ng-repeat doesn't like ES6 Maps so for now let's use this to make it an object array: FIXME: find a nicer solution, ng filter etc.
 let toObjectArray = (map) => {
   let arr = [];
   map.forEach((value, key, map) => {
@@ -78,10 +55,8 @@ let toObjectArray = (map) => {
   return arr;
 };
 
-// Websocket stuff
-
 io.sockets.on('connect', (socket) => {
-  console.log(`User ${socket.id} connected`);
+  console.debug(`User ${socket.id} connected`);
 
   // joinroom event allows a client to join an arbitrary room. The client will be evicted from all rooms it belongs to except it's 'direct message' room.
   socket.on('joinroom', (room) => {
@@ -116,9 +91,10 @@ io.sockets.on('connect', (socket) => {
       }
     });
   });
-  
+
+  // newroom allows a client to create a new room. This will update room state, push out updates to that room state to all clients.
   socket.on('newroom', (newroom) => {
-    console.log(`newroom from ${socket.id}: ${JSON.stringify(newroom)}`);
+    console.debug(`newroom from ${socket.id}: ${JSON.stringify(newroom)}`);
     db.insert(newroom).then((response) => {
       if (response.ok) {
 	rooms.set(newroom.room, 0);
@@ -141,21 +117,12 @@ io.sockets.on('connect', (socket) => {
 //      pipe(s);
 //  });
 
+  // Disconnect event updates room state to reflect departure of client. 
   socket.on('disconnect', () => {
     rooms.set(socket.room, rooms.get(socket.room)-1);
     io.emit('roomstate', toObjectArray(rooms));
-    console.log(`User ${socket.id} disconnected`);
+    console.debug(`User ${socket.id} disconnected`);
   });
 });
-
-// Timelooped emitter spitting messages out to a room
-//let i = 1;
-//setInterval(() => {
-//  const datetime = (new Date()).toISOString().slice(0, 23).replace("T", " ");
-//  const message = { "room":"RNLI", "datetime":datetime, "username":"server", "message":`server message ${i}` };
-//  console.log(`Emitting message ${i}...`);
-//  io.sockets.emit('chatmessage', message);
-//  i++;
-//}, 3000);
 
 http.listen(port, () => { console.log(`Listening on port ${port}...`); });
