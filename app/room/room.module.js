@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('room', [
-  'state.service',
   'config',
-  'luegg.directives',
+  'luegg.directives', // scroll-glue directive
   'sockets'
 ]);
