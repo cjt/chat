@@ -3,7 +3,7 @@
   <ul class="list">
     
     <li ng-repeat="room in $ctrl.rooms"  class="clearfix">
-      <div class="about" ng-click="select(room)">
+      <div class="about" ng-click="$ctrl.select(room)">
 	<a href="#">
           <span class="name">{{room.room}}</span>
 	</a>
@@ -16,7 +16,7 @@
   <div class="room-create" id="room-create">
     <form name="roomcreateform" novalidate>
       <input type="text" placeholder="room" id="newroom" ng-model="newroom" required ng-minlength="1" />
-      <button ng-click="create(newroom)" ng-disabled="roomcreateform.$invalid">Create</button>
+      <button ng-click="$ctrl.create(newroom)" ng-disabled="roomcreateform.$invalid">Create</button>
     </form>
   </div>
 </div>

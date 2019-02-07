@@ -21,21 +21,21 @@
   <div class="chat-message clearfix">
     <form name="messageform" novalidate>
       <label for="username">Username: </label>
-      <input type="text" name="username" ng-model="username" ng-change="setUsername(username)" required ng-minlength="1" />
+      <input type="text" name="username" ng-model="$ctrl.username" required ng-minlength="1" />
       <ng-messages for="messageform.username.$error" ng-show="messageform.username.$invalid">
 	<ng-message when="required">This field is required</ng-message>
       </ng-messages>
 
       <br />
       
-      <textarea name="newmessage" id="newmessage" placeholder ="Type your message" rows="3" ng-model="newmessage" required ng-minlength="1"></textarea>
+      <textarea name="newmessage" id="newmessage" placeholder ="Type your message" rows="3" ng-model="$ctrl.newmessage" required ng-minlength="1"></textarea>
       <ng-messages for="messageform.newmessage.$error" ng-show="messageform.newmessage.$invalid">
 	<ng-message when="required">This field is required</ng-message>
       </ng-messages>
 
       <br />
       
-      <button ng-click="$ctrl.send(username, newmessage)" ng-disabled="messageform.$invalid">Send</button>
+      <button ng-click="$ctrl.send($ctrl.username, $ctrl.newmessage)" ng-disabled="messageform.$invalid">Send</button>
     </form>
   </div>  
 </div>
