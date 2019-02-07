@@ -26,12 +26,8 @@ const stream = require('socket.io-stream');
 const nano = require('nano')(`${couchDbUrl}`);
 const db = nano.db.use(dbName);
 
-/**
- * Retrieves all messages for a given room.
- *
- * @param name The name of room for which to retrieve messages.
- * @deprecated Replace with socket based 
- */
+// Static routes
+
 app.get('/api/room/:name', (request, response) => {
   const roomName = request.params.name;
   db.view('messages', 'messages', {
@@ -50,21 +46,13 @@ db.view('rooms', 'rooms', { group:true }).then((body) => {
   });
 });
 
-/**
- * Convert a map to an array of objects of key to value
- * @private
- */
-let mapToObjectArray = (map, keyname, valname) => {
+// Angulars ng-repeat doesn't like ES6 Maps so for now let's use this to make it an object array: FIXME: find a nicer solution, ng filter etc.
+let toObjectArray = (map) => {
   let arr = [];
   map.forEach((value, key, map) => {
-    arr.push({ keyname:key, valname:value });
+    arr.push({ "room":key, "usercount":value });
   });
   return arr;
-};
-
-// Angulars ng-repeat doesn't like ES6 Maps so for now let's use this to make it an object array: FIXME: find a nicer solution, ng filter etc.
-let roomStateToArray = (map) => {
-  return mapToObjectArray(map, "room", "usercount");
 };
 
 io.sockets.on('connect', (socket) => {
@@ -85,7 +73,7 @@ io.sockets.on('connect', (socket) => {
     
     // update room state and send updated roomstate to all clients
     rooms.set(room, rooms.get(room)+1);
-    io.emit('roomstate', roomStateToArray(rooms));
+    io.emit('roomstate', toObjectArray(rooms));
 
     // tell client to load history for room
     socket.emit('chathistory', room);
@@ -111,7 +99,7 @@ io.sockets.on('connect', (socket) => {
       if (response.ok) {
 	rooms.set(newroom.room, 0);
 
-	io.emit('roomstate', roomStateToArray(rooms));
+	io.emit('roomstate', toObjectArray(rooms));
       }
       else {
 	console.error(`Error saving new room message from ${socket.id}: ${JSON.stringify(response)}`);
@@ -120,7 +108,7 @@ io.sockets.on('connect', (socket) => {
   });
 
   // immediately push out room state to the newly connected client
-  socket.emit('roomstate', roomStateToArray(rooms));
+  socket.emit('roomstate', toObjectArray(rooms));
   
 //  stream(socket).on('message', (s, data) => {
 //    db.changes(dbName, { filter: "filters/room",
@@ -132,7 +120,7 @@ io.sockets.on('connect', (socket) => {
   // Disconnect event updates room state to reflect departure of client. 
   socket.on('disconnect', () => {
     rooms.set(socket.room, rooms.get(socket.room)-1);
-    io.emit('roomstate', roomStateToArray(rooms));
+    io.emit('roomstate', toObjectArray(rooms));
     console.debug(`User ${socket.id} disconnected`);
   });
 });
